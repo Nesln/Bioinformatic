@@ -1,4 +1,4 @@
-#ubuntu20.04系统
+#ubuntu20.04系统    rm -r 就算有文件也删除
 #miniconda安装
 
 cd
@@ -19,12 +19,12 @@ cd miniconda
  vim ~/.condarc 
  
  内文件复制
- channels:
-  - defaults
  show_channel_urls: true
  default_channels:
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
@@ -40,3 +40,26 @@ cd miniconda
  #在#conda环境下进行bwa的安装
  conda search bwa #确认需要更新的bwa
  conda install bwa -y  #安装更新
+ 
+ #添加软链接
+ mkdir -p ~/.local/bin  
+ ln -s ~/miniconda3/bin/bwa ~/.local/bin 
+ ln -s ~/miniconda3/bin/samtools ~/.local/bin
+ 
+ #查看conda环境
+ conda info --envs
+ 
+ 创建python3环境
+ conda create -n python3 python=3
+ 
+ #启动python3
+ conda activate python3
+ 
+ #更新所有包
+ conda update --all
+ conda install macs2
+
+#python3背景下 安装转录组分析软件
+conda install fastqc trimmomatic
+conda install hisat2 samtool sra-tools
+conda install htseq （似乎只能在python2下运行） #如果不能用  #则参考https://www.jianshu.com/p/9184b7f6157b
