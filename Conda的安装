@@ -1,0 +1,42 @@
+#ubuntu20.04系统
+#miniconda安装
+
+cd
+mkdir miniconda
+cd miniconda
+~/miniconda$ wget -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+#或自己下载后 https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh
+#cp /mnt/c/Users/92101/Desktop/Miniconda3-latest-Linux-x86_64.sh ~/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+ bash Miniconda3-latest-Linux-x86_64.sh
+ 
+ 启动conda环境
+ source ~/miniconda3/bin/activate
+ 
+ 配置镜像站
+ conda config --set show_channel_urls yes
+ vim ~/.condarc 
+ 
+ 内文件复制
+ channels:
+  - defaults
+ show_channel_urls: true
+ default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+  - defaults
+ custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+ 
+ #在#conda环境下进行bwa的安装
+ conda search bwa #确认需要更新的bwa
+ conda install bwa -y  #安装更新
