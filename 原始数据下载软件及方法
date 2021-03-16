@@ -1,0 +1,21 @@
+#配置Aspera Connect     在idm查看最近的下载链接  https://www.ibm.com/aspera/connect/
+cd biosoft
+wget https://d3gcli72yxqn2z.cloudfront.net/connect_latest/v4/bin/ibm-aspera-connect-3.11.1.58-linux-g2.12-64.tar.gz
+#或用网盘进行下载
+cp /mnt/c/Users/92101/Desktop/ibm-aspera-connect-3.11.1.58-linux-g2.12-64.tar.gz ~/biosoft/ibm-aspera-connect-3.11.1.58-linux-g2.12-64.tar.gz
+tar zxvf ibm-aspera-connect-3.11.1.58-linux-g2.12-64.tar.gz
+
+#install
+bash ibm-aspera-connect-3.11.1.58-linux-g2.12-64.sh
+
+#添加环境变量
+echo 'export PATH=~/.aspera/connect/bin:$PATH' >> ~/.bashrc
+
+#启动环境
+source ~/.bashrc  或 conda activate base
+
+#密钥备份到/home/的家目录（后面会用，否则报错）
+cp ~/.aspera/connect/etc/asperaweb_id_dsa.openssh ~/
+
+# check help file
+ascp --help 
