@@ -1,3 +1,6 @@
+ 启动conda环境
+ source ~/miniconda3/bin/activate
+ 
 #配置Aspera Connect     在idm查看最近的下载链接  https://www.ibm.com/aspera/connect/
 cd biosoft
 wget https://d3gcli72yxqn2z.cloudfront.net/connect_latest/v4/bin/ibm-aspera-connect-3.11.1.58-linux-g2.12-64.tar.gz
@@ -12,7 +15,7 @@ bash ibm-aspera-connect-3.11.1.58-linux-g2.12-64.sh
 echo 'export PATH=~/.aspera/connect/bin:$PATH' >> ~/.bashrc
 
 #启动环境
-source ~/.bashrc  或 conda activate base
+source ~/.bashrc
 
 #密钥备份到/home/的家目录（后面会用，否则报错）
 cp ~/.aspera/connect/etc/asperaweb_id_dsa.openssh ~/
@@ -33,24 +36,32 @@ Aspera的常用参数：
 #编写脚本ascp.sh 快速使用ascp下载ncbi的文件
 mkdir sra && cd sra
 
-vim asp.sh
+## ncbi的sra数据已经是失效   使用下面的aspena.sh到ENA数据库下载
+#vim asp.sh
 #!/bin/bash
-SRA=$1
-DIR=$2 
-ascp -i ~/.aspera/connect/etc/asperaweb_id_dsa.openssh -k 1 -T -l 200m anonftp@ftp.ncbi.nlm.nih.gov:/sra/sra-instant/reads/ByRun/sra/SRR/${SRA:4:6}/${SRA}/${SRA}.sra ${DIR}
+#SRA=$1
+#DIR=$2 
+#ascp -i ~/.aspera/connect/etc/asperaweb_id_dsa.openssh -k 1 -T -l 200m anonftp@ftp.ncbi.nlm.nih.gov:/sra/sra-instant/reads/ByRun/sra/SRR/${SRA:4:6}/${SRA}/${SRA}.sra ${DIR}
 
 vim aspena.sh
 #!/bin/bash
 SRR=$1
 DIR=$2
-ascp -QT -l 300m -P33001 -i ~/.aspera/connect/etc/asperaweb_id_dsa.openssh era-fasp@fasp.sra.ebi.ac.uk:/vol1/fastq/${SRR:4:6}/${SRR}/${SRR}_1.fastq.gz ${DIR}
+ascp -QT -l 300m -P33001 -i ~/.aspera/connect/etc/asperaweb_id_dsa.openssh era-fasp@fasp.sra.ebi.ac.uk:vol1/fastq/${SRR:0:6}/${SRR}/${SRR}.fastq.gz ${DIR}
+#ascp -QT -l 300m -P33001 -i ~/.aspera/connect/etc/asperaweb_id_dsa.openssh era-fasp@fasp.sra.ebi.ac.uk:vol1/fastq/SRR032/SRR032087/SRR032087.fastq.gz
 
-#常规方法：
+#常规下载方法
 prefetch -v SRR925811
 
 #alias命名别名
-echo alias asp="/home/nesln/sra/asp.sh"  > ~/.bashrc
-source ~/.bashrc
+
+echo alias aspena="/home/nesln/sra/aspena.sh"  >> ~/.bashrc
+#echo alias asp="/home/nesln/sra/asp.sh" >> ~/.bashrc
+source ~/.bashrc #启动命名的alias
+
 #之后便可以直接使用下面命令下载
-asp SRR2854733 download_dir
+aspena SRR2854733 ~/sra
+
+
+
 
