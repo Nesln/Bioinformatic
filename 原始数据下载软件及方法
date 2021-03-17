@@ -19,3 +19,38 @@ cp ~/.aspera/connect/etc/asperaweb_id_dsa.openssh ~/
 
 # check help file
 ascp --help 
+
+#Aspera的用法：
+$ ascp [参数] 目标文件 目的地址
+Aspera的常用参数：
+-T      不进行加密。若不添加此参数，可能会下载不了。
+-i string     输入私钥，安装 aspera 后有在目录 ~/.aspera/connect/etc/ 下有几个私钥，使用 linux 服务器的时候一般使用 asperaweb_id_dsa.openssh 文件作为私钥。
+--host=string       ftp的host名，NCBI的为ftp-private.ncbi.nlm.nih.gov；EBI的为fasp.sra.ebi.ac.uk。
+--user=string       用户名，NCBI的为anonftp，EBI的为era-fasp。
+--mode=string     选择模式，上传为 send，下载为 recv。
+-l string        设置最大传输速度，比如设置为 200M 则表示最大传输速度为 200m/s。若不设置该参数，则一般可达到10m/s的速度，而设置了，传输速度可以更高。
+
+#编写脚本ascp.sh 快速使用ascp下载ncbi的文件
+mkdir sra && cd sra
+
+vim asp.sh
+#!/bin/bash
+SRA=$1
+DIR=$2 
+ascp -i ~/.aspera/connect/etc/asperaweb_id_dsa.openssh -k 1 -T -l 200m anonftp@ftp.ncbi.nlm.nih.gov:/sra/sra-instant/reads/ByRun/sra/SRR/${SRA:4:6}/${SRA}/${SRA}.sra ${DIR}
+
+vim aspena.sh
+#!/bin/bash
+SRR=$1
+DIR=$2
+ascp -QT -l 300m -P33001 -i ~/.aspera/connect/etc/asperaweb_id_dsa.openssh era-fasp@fasp.sra.ebi.ac.uk:/vol1/fastq/${SRR:4:6}/${SRR}/${SRR}_1.fastq.gz ${DIR}
+
+#常规方法：
+prefetch -v SRR925811
+
+#alias命名别名
+echo alias asp="/home/nesln/sra/asp.sh"  > ~/.bashrc
+source ~/.bashrc
+#之后便可以直接使用下面命令下载
+asp SRR2854733 download_dir
+
